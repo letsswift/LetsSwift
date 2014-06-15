@@ -26,3 +26,8 @@ Swift中使用`let`关键词来定义常量，`var`关键词来定义变量
 Swift中几乎可以使用任何字符来作为常量和变量名，包括Unicode。
 
     let 你好 = "你好，世界！"
+
+也可以在声明常量或者变量的时候指明类型：
+    
+    var welcomeMessage: String
+
