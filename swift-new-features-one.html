@@ -1,0 +1,314 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote {
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: "Helvetica Neue", Helvetica, "Hiragino Sans GB", Arial, sans-serif;
+    font-size: 13px;
+    line-height: 18px;
+    color: #737373;
+    background-color: white;
+    margin: 10px 13px 10px 13px;
+}
+table {
+	margin: 10px 0 15px 0;
+	border-collapse: collapse;
+}
+td,th {	
+	border: 1px solid #ddd;
+	padding: 3px 10px;
+}
+th {
+	padding: 5px 10px;	
+}
+
+a {
+    color: #0069d6;
+}
+a:hover {
+    color: #0050a3;
+    text-decoration: none;
+}
+a img {
+    border: none;
+}
+p {
+    margin-bottom: 9px;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #404040;
+    line-height: 36px;
+}
+h1 {
+    margin-bottom: 18px;
+    font-size: 30px;
+}
+h2 {
+    font-size: 24px;
+}
+h3 {
+    font-size: 18px;
+}
+h4 {
+    font-size: 16px;
+}
+h5 {
+    font-size: 14px;
+}
+h6 {
+    font-size: 13px;
+}
+hr {
+    margin: 0 0 19px;
+    border: 0;
+    border-bottom: 1px solid #ccc;
+}
+blockquote {
+    padding: 13px 13px 21px 15px;
+    margin-bottom: 18px;
+    font-family:georgia,serif;
+    font-style: italic;
+}
+blockquote:before {
+    content:"\201C";
+    font-size:40px;
+    margin-left:-10px;
+    font-family:georgia,serif;
+    color:#eee;
+}
+blockquote p {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 18px;
+    margin-bottom: 0;
+    font-style: italic;
+}
+code, pre {
+    font-family: Monaco, Andale Mono, Courier New, monospace;
+}
+code {
+    background-color: #fee9cc;
+    color: rgba(0, 0, 0, 0.75);
+    padding: 1px 3px;
+    font-size: 12px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+pre {
+    display: block;
+    padding: 14px;
+    margin: 0 0 18px;
+    line-height: 16px;
+    font-size: 11px;
+    border: 1px solid #d9d9d9;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+pre code {
+    background-color: #fff;
+    color:#737373;
+    font-size: 11px;
+    padding: 0;
+}
+sup {
+    font-size: 0.83em;
+    vertical-align: super;
+    line-height: 0;
+}
+* {
+	-webkit-print-color-adjust: exact;
+}
+@media screen and (min-width: 914px) {
+    body {
+        width: 854px;
+        margin:10px auto;
+    }
+}
+@media print {
+	body,code,pre code,h1,h2,h3,h4,h5,h6 {
+		color: black;
+	}
+	table, pre {
+		page-break-inside: avoid;
+	}
+}
+</style>
+<title>Swift新特性介绍（一） 语言基础中的新特性</title>
+
+</head>
+<body>
+<h1>Swift新特性介绍（一） 语言基础中的新特性</h1>
+
+<hr />
+
+<h2>常量和变量的命名</h2>
+
+<p>Swift可以使用几乎任何字符来作为常量和变量名，包括Unicode：</p>
+
+<pre><code>let π = 3.14159
+
+let 你好 = "你好世界"
+
+let 星星 = "★"
+</code></pre>
+
+<h2>注释可嵌套</h2>
+
+<p>Swift中的多行注释<code>/**/</code>可以嵌套，这样可以方便地在大段已注释的代码块中继续添加注释：</p>
+
+<pre><code>/* this is the start of the first multiline comment
+
+/* this is the second, nested multiline comment */
+
+this is the end of the first multiline comment */
+</code></pre>
+
+<h2>数量表示</h2>
+
+<p>浮点数12.1875可以表示为：</p>
+
+<pre><code>let decimalDouble= 12.1875
+
+let exponentDouble= 1.21875e1
+</code></pre>
+
+<p>数字可以包含额外的下划线<code>_</code>，增加代码的可读性，但是不影响代码的运行：</p>
+
+<pre><code>let paddedDouble= 000123.456
+
+let oneMillion= 1_000_000
+
+let justOverOneMillion= 1_000_000.000_000_1
+</code></pre>
+
+<h2>元组类型</h2>
+
+<p>Swift中可以定义元组类型，将一些不同的数据封装成一个元素，并且还可以作为函数值返回：</p>
+
+<pre><code>let (statusCode, statusMessage) = http404Error
+
+println("The status code is \(statusCode)")
+
+// prints "The status code is 404"
+
+println("The status message is \(statusMessage)")
+
+// prints "The status message is Not Found"
+</code></pre>
+
+<p>如果仅需要元组中的个别值，可以使用<code>_</code>来忽略其他值：</p>
+
+<pre><code>let (justTheStatusCode, _) = http404Error
+
+println("The status code is \(justTheStatusCode)")
+
+// prints "The status code is 404"
+</code></pre>
+
+<p>元组的赋值：</p>
+
+<pre><code>let (x, y) = (1, 2)
+
+// x等于1, 并且y等于2
+</code></pre>
+
+<h2>可选类型(Optional Type)</h2>
+
+<p>简单来讲这种类型可以是一个特定的值，或者为空。使用<code>类型+?</code>的形式来定义：</p>
+
+<pre><code>let possibleNumber = "123"
+
+let convertedNumber = possibleNumber.toInt()
+
+// convertedNumber is inferred to be of type "Int?", or "optional Int"
+</code></pre>
+
+<p>更多关于可选类型，<code>?</code>和<code>!</code>的问题，可以参考：<a href="http://letsswift.com/2014/06/swift-questionmark-exclamatorymark/">Swift中的问号?和感叹号!</a></p>
+
+<h2>浮点数的余数运算</h2>
+
+<p>Swift中浮点数也可以进行余数运算：</p>
+
+<pre><code>8 % 2.5 // equals 0.5
+</code></pre>
+
+<h2>范围运算符</h2>
+
+<p>使用<code>a...b</code>定义一个封闭范围，从a到b包括a和b的所有值</p>
+
+<pre><code>for index in 1...5 {
+
+println("\(index) times 5 is \(index * 5)")
+
+}
+
+// 1 times 5 is 5
+
+// 2 times 5 is 10
+
+// 3 times 5 is 15
+
+// 4 times 5 is 20
+
+// 5 times 5 is 25
+</code></pre>
+
+<p>使用<code>a..b</code>定义左闭右开区间，从a到b，包括a但是不包括b的所有值</p>
+
+<pre><code>let names = ["Anna", "Alex", "Brian", "Jack"]
+
+let count = names.count
+
+for i in 0..count {
+
+println("Person \(i + 1) is called \(names[i])")
+
+}
+
+// Person 1 is called Anna
+
+// Person 2 is called Alex
+
+// Person 3 is called Brian
+
+// Person 4 is called Jack
+</code></pre>
+
+<h2>Switch语句</h2>
+
+<p>Swift中的<code>switch</code>语句不会在<code>case</code>语句后面因为没有<code>break</code>而自动跳转到下一个<code>case</code>。</p>
+
+<p>另外<code>case</code>语句还可以完成范围匹配，元组匹配，使用where关键词等。具体使用方法可以参考：<a href="http://letsswift.com/2014/06/control-flow/">Swift中文教程（五）控制流</a></p>
+
+<hr />
+
+<p>翻译工作已告一段落，校对工作继续进行中~ 欢迎参与~</p>
+
+<p>校对地址：<a href="https://github.com/letsswift/The-Swift-Programming-Language-in-Chinese">https://github.com/letsswift/The-Swift-Programming-Language-in-Chinese</a></p>
+
+<p>Swift新特性学习系列文章更新中</p>
+
+<p>本文由LetsSwift.com原创发布</p>
+
+<p>转载请注明本文原始链接：<a href="http://letsswift.com/2014/06/swift-new-features-one/">http://letsswift.com/2014/06/swift-new-features-one/</a></p>
+</body>
+</html>

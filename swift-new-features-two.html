@@ -1,0 +1,340 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote {
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: "Helvetica Neue", Helvetica, "Hiragino Sans GB", Arial, sans-serif;
+    font-size: 13px;
+    line-height: 18px;
+    color: #737373;
+    background-color: white;
+    margin: 10px 13px 10px 13px;
+}
+table {
+	margin: 10px 0 15px 0;
+	border-collapse: collapse;
+}
+td,th {	
+	border: 1px solid #ddd;
+	padding: 3px 10px;
+}
+th {
+	padding: 5px 10px;	
+}
+
+a {
+    color: #0069d6;
+}
+a:hover {
+    color: #0050a3;
+    text-decoration: none;
+}
+a img {
+    border: none;
+}
+p {
+    margin-bottom: 9px;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #404040;
+    line-height: 36px;
+}
+h1 {
+    margin-bottom: 18px;
+    font-size: 30px;
+}
+h2 {
+    font-size: 24px;
+}
+h3 {
+    font-size: 18px;
+}
+h4 {
+    font-size: 16px;
+}
+h5 {
+    font-size: 14px;
+}
+h6 {
+    font-size: 13px;
+}
+hr {
+    margin: 0 0 19px;
+    border: 0;
+    border-bottom: 1px solid #ccc;
+}
+blockquote {
+    padding: 13px 13px 21px 15px;
+    margin-bottom: 18px;
+    font-family:georgia,serif;
+    font-style: italic;
+}
+blockquote:before {
+    content:"\201C";
+    font-size:40px;
+    margin-left:-10px;
+    font-family:georgia,serif;
+    color:#eee;
+}
+blockquote p {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 18px;
+    margin-bottom: 0;
+    font-style: italic;
+}
+code, pre {
+    font-family: Monaco, Andale Mono, Courier New, monospace;
+}
+code {
+    background-color: #fee9cc;
+    color: rgba(0, 0, 0, 0.75);
+    padding: 1px 3px;
+    font-size: 12px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+pre {
+    display: block;
+    padding: 14px;
+    margin: 0 0 18px;
+    line-height: 16px;
+    font-size: 11px;
+    border: 1px solid #d9d9d9;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+pre code {
+    background-color: #fff;
+    color:#737373;
+    font-size: 11px;
+    padding: 0;
+}
+sup {
+    font-size: 0.83em;
+    vertical-align: super;
+    line-height: 0;
+}
+* {
+	-webkit-print-color-adjust: exact;
+}
+@media screen and (min-width: 914px) {
+    body {
+        width: 854px;
+        margin:10px auto;
+    }
+}
+@media print {
+	body,code,pre code,h1,h2,h3,h4,h5,h6 {
+		color: black;
+	}
+	table, pre {
+		page-break-inside: avoid;
+	}
+}
+</style>
+<title>Swift新特性介绍（二） 函数、枚举、类与结构</title>
+
+</head>
+<body>
+<h1>Swift新特性介绍（二） 函数、枚举、类与结构</h1>
+
+<h2>可变参数</h2>
+
+<p>Swift的函数可以接受零个或多个指定类型的参数值，使用<code>...</code>来表示传递的是可变参数</p>
+
+<pre><code>func arithmeticMean(numbers: Double...) -&gt; Double {
+    var total: Double = 0
+    for number in numbers {
+        total += number
+    }
+    return total / Double(numbers.count)
+}
+arithmeticMean(1, 2, 3, 4, 5)
+// returns 3.0, which is the arithmetic mean of these five numbers
+arithmeticMean(3, 8, 19)
+// returns 10.0, which is the arithmetic mean of these three numbers
+</code></pre>
+
+<h2>枚举类型</h2>
+
+<p>和C语言中的枚举不同的是，Swift中的枚举类型没有为这一组相关名称指定一组整数值作为初始值。Swift中的枚举成员可以指定为任何类型，整数，字符或者浮点数。</p>
+
+<pre><code>enum CompassPoint {
+    case North
+    case South
+    case East
+    case West
+}
+</code></pre>
+
+<p>上面的例子中的<code>CompassPoint.North</code>并不默认为0。</p>
+
+<h3>便捷性</h3>
+
+<p>一旦声明了一个枚举类型</p>
+
+<pre><code>var directionToHead = CompassPoint.West
+</code></pre>
+
+<p>在修改这个枚举值的时候就可以省略枚举类名了</p>
+
+<pre><code>directionToHead = .East
+</code></pre>
+
+<h3>功能性</h3>
+
+<p>Swift中的枚举类型可以被声明为更高级的形式：</p>
+
+<pre><code>enum Barcode {
+    case UPCA(Int, Int, Int)
+    case QRCode(String)
+}
+</code></pre>
+
+<p>这个Barcode枚举被定义为两种可能，UPC-A模式的条码，关联值了三个<code>Int</code>值；或者是二维码，关键一个<code>String</code>的值。</p>
+
+<p>然后就可以方便地创建条码类型：</p>
+
+<pre><code>var productBarcode = Barcode.UPCA(8, 85909_51226, 3)
+productBarcode = .QRCode("ABCDEFGHIJKLMNOP")
+</code></pre>
+
+<p>然后在switch语句中使用：</p>
+
+<pre><code>switch productBarcode {
+    case .UPCA(let numberSystem, let identifier, let check):
+    println("UPC-A with value of \(numberSystem), \(identifier), \(check).")
+    case .QRCode(let productCode):
+    println("QR code with value of \(productCode).")
+}
+// prints "QR code with value of ABCDEFGHIJKLMNOP."
+</code></pre>
+
+<h2>类与结构</h2>
+
+<h3>结构和枚举是数值类型</h3>
+
+<p>当赋值或者作为参数传递时，是完整地创建了一个副本，而不是使用的引用对象：</p>
+
+<pre><code>let hd = Resolution(width: 1920, height: 1080)
+var cinema = hd
+cinema.width = 2048
+println("cinema is now \(cinema.width) pixels wide")
+// prints "cinema is now 2048 pixels wide"
+println("hd is still \(hd.width) pixels wide")
+// prints "hd is still 1920 pixels wide"
+</code></pre>
+
+<h3>类和结构是引用类型</h3>
+
+<p>当赋值或者作为参数传递时，传递的是引用对象。下面例子中<code>VideoMode</code>是一个类：</p>
+
+<pre><code>let tenEighty = VideoMode()
+tenEighty.resolution = hd
+tenEighty.interlaced = true
+tenEighty.name = "1080i"
+tenEighty.frameRate = 25.0
+let alsoTenEighty = tenEighty
+alsoTenEighty.frameRate = 30.0
+println("The frameRate property of tenEighty is now \(tenEighty.frameRate)")
+// prints "The frameRate property of tenEighty is now 30.0"
+</code></pre>
+
+<p>判断引用是否相等，可以使用<code>===</code>和<code>!==</code>。</p>
+
+<h3>字典的赋值</h3>
+
+<p>字典赋值或者作为参数传递时，会被完整地复制，创建一个副本：</p>
+
+<pre><code>var ages = ["Peter": 23, "Wei": 35, "Anish": 65, "Katya": 19]
+var copiedAges = ages
+copiedAges["Peter"] = 24
+println(ages["Peter"])
+// prints "23"
+</code></pre>
+
+<h3>数组的赋值</h3>
+
+<p>数组只有在进行了修改数组长度操作时，才会完整地复制，创建一个副本。其他时候使用的是引用：</p>
+
+<pre><code>var a = [1, 2, 3]
+var b = a
+var c = a
+println(a[0])
+// 1
+println(b[0])
+// 1
+println(c[0])
+// 1
+a[0] = 42
+println(a[0])
+// 42
+println(b[0])
+// 42
+println(c[0])
+// 42
+a.append(4)
+a[0] = 777
+//数组a添加了一个数字，改变了数组大小，所以数组a创建了一个副本
+println(a[0])
+// 777
+println(b[0])
+// 42
+println(c[0])
+// 42
+</code></pre>
+
+<p>可以使用<code>unshare</code>方法来使一个数组“独立”，成为一个新的“副本”</p>
+
+<pre><code>b.unshare()
+b[0] = -105
+println(a[0])
+// 777
+println(b[0])
+// -105
+println(c[0])
+// 42
+</code></pre>
+
+<p>也可以使用<code>copy</code>方法来完成强制拷贝</p>
+
+<pre><code>var names = ["Mohsen", "Hilary", "Justyn", "Amy", "Rich", "Graham", "Vic"]
+var copiedNames = names.copy()
+copiedNames[0] = "Mo"
+println(names[0])
+// prints "Mohsen"
+</code></pre>
+
+<hr />
+
+<p>翻译工作已告一段落，校对工作继续进行中~ 欢迎参与~</p>
+
+<p>校对地址：<a href="https://github.com/letsswift/The-Swift-Programming-Language-in-Chinese">https://github.com/letsswift/The-Swift-Programming-Language-in-Chinese</a></p>
+
+<p>Swift新特性学习系列文章更新中</p>
+
+<p>本文由LetsSwift.com原创发布</p>
+
+<p>转载请注明本文原始链接：<a href="http://letsswift.com/2014/06/swift-new-features-two/">http://letsswift.com/2014/06/swift-new-features-two/</a></p>
+</body>
+</html>
