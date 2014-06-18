@@ -1,0 +1,266 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote {
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: "Helvetica Neue", Helvetica, "Hiragino Sans GB", Arial, sans-serif;
+    font-size: 13px;
+    line-height: 18px;
+    color: #737373;
+    background-color: white;
+    margin: 10px 13px 10px 13px;
+}
+table {
+	margin: 10px 0 15px 0;
+	border-collapse: collapse;
+}
+td,th {	
+	border: 1px solid #ddd;
+	padding: 3px 10px;
+}
+th {
+	padding: 5px 10px;	
+}
+
+a {
+    color: #0069d6;
+}
+a:hover {
+    color: #0050a3;
+    text-decoration: none;
+}
+a img {
+    border: none;
+}
+p {
+    margin-bottom: 9px;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #404040;
+    line-height: 36px;
+}
+h1 {
+    margin-bottom: 18px;
+    font-size: 30px;
+}
+h2 {
+    font-size: 24px;
+}
+h3 {
+    font-size: 18px;
+}
+h4 {
+    font-size: 16px;
+}
+h5 {
+    font-size: 14px;
+}
+h6 {
+    font-size: 13px;
+}
+hr {
+    margin: 0 0 19px;
+    border: 0;
+    border-bottom: 1px solid #ccc;
+}
+blockquote {
+    padding: 13px 13px 21px 15px;
+    margin-bottom: 18px;
+    font-family:georgia,serif;
+    font-style: italic;
+}
+blockquote:before {
+    content:"\201C";
+    font-size:40px;
+    margin-left:-10px;
+    font-family:georgia,serif;
+    color:#eee;
+}
+blockquote p {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 18px;
+    margin-bottom: 0;
+    font-style: italic;
+}
+code, pre {
+    font-family: Monaco, Andale Mono, Courier New, monospace;
+}
+code {
+    background-color: #fee9cc;
+    color: rgba(0, 0, 0, 0.75);
+    padding: 1px 3px;
+    font-size: 12px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+pre {
+    display: block;
+    padding: 14px;
+    margin: 0 0 18px;
+    line-height: 16px;
+    font-size: 11px;
+    border: 1px solid #d9d9d9;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+pre code {
+    background-color: #fff;
+    color:#737373;
+    font-size: 11px;
+    padding: 0;
+}
+sup {
+    font-size: 0.83em;
+    vertical-align: super;
+    line-height: 0;
+}
+* {
+	-webkit-print-color-adjust: exact;
+}
+@media screen and (min-width: 914px) {
+    body {
+        width: 854px;
+        margin:10px auto;
+    }
+}
+@media print {
+	body,code,pre code,h1,h2,h3,h4,h5,h6 {
+		color: black;
+	}
+	table, pre {
+		page-break-inside: avoid;
+	}
+}
+</style>
+<title>Swift新特性介绍（四） 构造、析构、继承</title>
+
+</head>
+<body>
+<h1>Swift新特性介绍（四） 构造、析构、继承</h1>
+
+<h1>构造函数</h1>
+
+<p>在创建一个类型的实例的时候，构造函数中的参数需要写全参数名：</p>
+
+<pre><code>struct Color {
+    let red = 0.0, green = 0.0, blue = 0.0
+    init(red: Double, green: Double, blue: Double) {
+        self.red   = red
+        self.green = green
+        self.blue  = blue
+    }
+}
+let magenta = Color(red: 1.0, green: 0.0, blue: 1.0)
+let veryGreen = Color(0.0, 1.0, 0.0)
+// this reports a compile-time error - external names are required
+</code></pre>
+
+<p>在构造函数中，还可以使用闭包来初始化属性：</p>
+
+<pre><code>struct Checkerboard {
+    let boardColors: Bool[] = {
+        var temporaryBoard = Bool[]()
+        var isBlack = false
+        for i in 1...10 {
+            for j in 1...10 {
+                temporaryBoard.append(isBlack)
+                isBlack = !isBlack
+            }
+            isBlack = !isBlack
+        }
+        return temporaryBoard
+        }()
+    func squareIsBlackAtRow(row: Int, column: Int) -&gt; Bool {
+        return boardColors[(row * 10) + column]
+    }
+}
+</code></pre>
+
+<p>上面例子中的boardColors就是使用闭包来初始化的，间隔将棋盘格填色。</p>
+
+<h1>析构函数</h1>
+
+<p>Swift通过自动引用计数<code>ARC</code>来处理实例的内存管理，自动释放不再需要的实例以释放资源。当代码需要额外的操作时，可以自定义析构函数。需要注意的是，每个类最多只能有一个析构函数，析构函数不带任何参数和括号：</p>
+
+<pre><code>deinit {
+// 执行析构过程
+}
+</code></pre>
+
+<h1>继承</h1>
+
+<p>任何一个不继承于其他类的类被称作基类。Swift的类不是从一个全局的基类继承而来，所有在类的定义中没有继承其他父类的类都是基类：</p>
+
+<pre><code>class Vehicle {
+    var numberOfWheels: Int
+    var maxPassengers: Int
+    func description() -&gt; String {
+        return "\(numberOfWheels) wheels; up to \(maxPassengers) passengers"
+    }
+    init() {
+        numberOfWheels = 0
+        maxPassengers = 1
+    }
+}
+</code></pre>
+
+<p>继承父类的子类在重写函数的时候，必须要加<code>override</code>关键词以标示该方法为重写方法，这样的好处是可以检查父类中是否有相对应的方法，不会因名称错误而造成一些不可预知的错误。</p>
+
+<pre><code>class Car: Vehicle {
+    var speed: Double = 0.0
+    init() {
+        super.init()
+        maxPassengers = 5
+        numberOfWheels = 4
+    }
+    override func description() -&gt; String {
+        return super.description() + "; "
+            + "traveling at \(speed) mph"
+    }
+}
+</code></pre>
+
+<p>除了函数的重载，类的属性在子类中也可以重载，比如<code>getter</code>和<code>setter</code>方法：</p>
+
+<pre><code>class SpeedLimitedCar: Car {
+    override var speed: Double  {
+        get {
+            return super.speed
+        }
+        set {
+            super.speed = min(newValue, 40.0)
+        }
+    }
+}
+</code></pre>
+
+<p>使用<code>@final</code>标记类，可以禁止重写一个类，或者一个类的方法，属性，如：<code>@final class</code></p>
+
+<p>在子类的构造函数中需要注意的问题：</p>
+
+<pre><code>1、自定义构造函数要先调用自己类默认构造函数，自己重写默认构造函数要先调用父类默认构造函数
+
+2、应该要先调用父类的构造函数或者自身的默认构造函数，以防止先给属性赋值了然后才调用父类或者自身的默认构造函数而把之前的赋值覆盖了
+</code></pre>
+</body>
+</html>
